@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# YouTube → Türkçe dublaj launcher
+# Kullanım: dub <youtube-url> [opsiyonlar]
+set -e
+
+# Script'in gerçek konumunu bul (PATH'teki symlink'leri de çöz).
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+    DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+    SOURCE="$(readlink "$SOURCE")"
+    [ "${SOURCE#/}" = "$SOURCE" ] && SOURCE="$DIR/$SOURCE"
+done
+PROJECT_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+
+if [ ! -f "$PROJECT_DIR/.env" ]; then
+    echo "HATA: $PROJECT_DIR/.env yok."
+    echo "Şunu çalıştır:"
+    echo "  cp $PROJECT_DIR/.env.example $PROJECT_DIR/.env"
+    echo "  nano $PROJECT_DIR/.env   # GEMINI_API_KEY'i yaz"
+    exit 1
+fi
+
+if [ ! -d "$PROJECT_DIR/.venv" ]; then
+    echo "HATA: venv yok. Once şunu çalıştır: cd $PROJECT_DIR && ./setup.sh"
+    exit 1
+fi
+
+source "$PROJECT_DIR/.venv/bin/activate"
+exec python "$PROJECT_DIR/cli.py" "$@"

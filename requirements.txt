@@ -1,0 +1,22 @@
+# Çekirdek pipeline
+mlx-whisper>=0.4.0        # lokal transkripsiyon (Apple Silicon)
+google-genai>=0.3.0      # Gemini çeviri
+pydub>=0.25.1            # ses işleme
+yt-dlp>=2024.10.0        # video indirme
+gradio>=4.44.0          # web arayüzü
+numpy>=1.24             # ses dizisi işleme
+
+# Isokron yerleştirme (senkron kalitesi)
+silero-vad>=5.1          # gerçek konuşma/duraklama tespiti (VAD)
+pyrubberband>=0.4.0      # perde-koruyan çift yönlü zaman germe
+# Not: pyrubberband, sistemde 'rubberband' ikilisini gerektirir:
+#   brew install rubberband
+
+# Ses klonlama (XTTS-v2) — lokal, ücretsiz. İlk çalıştırmada ~1.8GB model iner.
+# [codec] extra'sı torchcodec'i getirir (torch>=2.9 ses I/O için gerekli).
+coqui-tts[codec]>=0.24.0
+torch>=2.1.0
+torchaudio>=2.1.0
+# coqui-tts 0.27.x, transformers>=4.57 ister ama 5.x'te kaldırılan
+# isin_mps_friendly'yi import eder; bu yüzden 4.57.x'e sabitle.
+transformers>=4.57,<5

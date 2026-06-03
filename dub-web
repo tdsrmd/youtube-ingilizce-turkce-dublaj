@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# YouTube dublaj web arayüzü — lokal browserda açılır
+set -e
+
+# Script'in gerçek konumunu bul (PATH'teki symlink'leri de çöz).
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+    DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+    SOURCE="$(readlink "$SOURCE")"
+    [ "${SOURCE#/}" = "$SOURCE" ] && SOURCE="$DIR/$SOURCE"
+done
+PROJECT_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+
+if [ ! -f "$PROJECT_DIR/.env" ]; then
+    echo "HATA: $PROJECT_DIR/.env yok. Önce setup yap."
+    exit 1
+fi
+
+if [ ! -d "$PROJECT_DIR/.venv" ]; then
+    echo "HATA: venv yok. cd $PROJECT_DIR && ./setup.sh"
+    exit 1
+fi
+
+source "$PROJECT_DIR/.venv/bin/activate"
+exec python "$PROJECT_DIR/app.py"

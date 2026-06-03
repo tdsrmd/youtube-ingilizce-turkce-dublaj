@@ -1,0 +1,26 @@
+# --- Sırlar (ASLA commit edilmez) ---
+.env
+
+# --- Sanal ortam / Python ---
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# --- Üretim/çalışma çıktıları ---
+# indirme + transkript önbelleği
+.cache/
+# eski/yerel çıktı klasörü
+dub_output/
+*.mp4
+*.wav
+*.srt
+*.vtt
+*_intermediates/
+
+# --- Araç durumu / IDE / OS ---
+.omc/
+.DS_Store
+.idea/
+.vscode/
