@@ -69,6 +69,17 @@ cp .env.example .env
 | `--no-cache` | İndirme/transkript önbelleğini kullanma |
 | `--keep-intermediates` | Ara dosyaları sakla (debug) |
 
+### Alternatif ses motoru: Chatterbox (opsiyonel)
+
+XTTS-v2 varsayılan motordur. Chatterbox Multilingual (MIT lisanslı, aktif geliştirilen)
+alternatif olarak denenebilir; ama bağımlılıkları XTTS ile çakıştığından **ayrı venv**
+gerektirir:
+```bash
+python3.11 -m venv .venv-chatterbox
+.venv-chatterbox/bin/pip install -r requirements-chatterbox.txt
+./dub "<url>" --tts chatterbox      # veya web arayüzünde "Ses motoru"
+```
+
 ### Terim sözlüğü (opsiyonel)
 
 Tutarlı çeviri için kök dizine `glossary.json` koy (örnek: `glossary.example.json`):

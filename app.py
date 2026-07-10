@@ -48,7 +48,7 @@ def _rows_from(table):
     return list(table)
 
 
-def synth_stage(prep, table, keep_music, progress=gr.Progress()):
+def synth_stage(prep, table, keep_music, tts_engine, progress=gr.Progress()):
     """2. aşama: (düzenlenmiş) çeviriyi klonlanmış sesle seslendir + birleştir."""
     if prep is None:
         raise gr.Error("Önce '1. Çevir' adımını çalıştır.")
@@ -63,7 +63,8 @@ def synth_stage(prep, table, keep_music, progress=gr.Progress()):
     def cb(frac, desc):
         progress(frac, desc=desc)
 
-    result = pipeline.synthesize_and_merge(prep, keep_music=keep_music, progress=cb)
+    result = pipeline.synthesize_and_merge(
+        prep, keep_music=keep_music, tts_backend=tts_engine, progress=cb)
     return str(result.video), f"✅ Kaydedildi: {result.video}"
 
 
@@ -126,6 +127,12 @@ def build_ui():
                 gr.Markdown("### 3️⃣ Seslendir & Birleştir")
                 with gr.Row():
                     with gr.Column(scale=2):
+                        tts_engine = gr.Radio(
+                            choices=[("XTTS-v2", "xtts"), ("Chatterbox", "chatterbox")],
+                            value="xtts",
+                            label="Ses motoru",
+                            info="XTTS: hızlı, ana venv | Chatterbox: .venv-chatterbox gerektirir",
+                        )
                         keep_music = gr.Checkbox(
                             label="Arka plan müziğini/sesini koru",
                             info="Orijinal sesi %18 volumda karıştır",
@@ -148,7 +155,7 @@ def build_ui():
                 )
                 synth_btn.click(
                     fn=synth_stage,
-                    inputs=[prep_state, transcript, keep_music],
+                    inputs=[prep_state, transcript, keep_music, tts_engine],
                     outputs=[output_video, status],
                 )
 

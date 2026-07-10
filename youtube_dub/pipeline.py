@@ -149,6 +149,7 @@ def synthesize_and_merge(
     *,
     keep_music: bool = False,
     voice_sample: Optional[str] = None,
+    tts_backend: str = "xtts",
     output: Optional[str] = None,
     subs: bool = False,
     burn_subs: bool = False,
@@ -173,8 +174,8 @@ def synthesize_and_merge(
                 prep.video_path, segments, work_dir / "voice_ref.wav")
             log.info("      Orijinal konuşmacı sesi referans alındı (klonlama).")
 
-        _p(progress, 0.25, "[1/3] Türkçe seslendirme (XTTS ses klonlama)...")
-        synthesize_segments(segments, work_dir, ref_wav)
+        _p(progress, 0.25, f"[1/3] Türkçe seslendirme ({tts_backend} ses klonlama)...")
+        synthesize_segments(segments, work_dir, ref_wav, backend=tts_backend)
 
         _p(progress, 0.65, "[2/3] Ses miksleniyor (isokron yerleştirme)...")
         dubbed_audio = work_dir / "dubbed_audio.wav"
@@ -214,6 +215,7 @@ def run(
     model: str = "large-v3-turbo",
     keep_music: bool = False,
     voice_sample: Optional[str] = None,
+    tts_backend: str = "xtts",
     output: Optional[str] = None,
     use_cache: bool = True,
     keep_intermediates: bool = False,
@@ -227,6 +229,6 @@ def run(
     prep = prepare(url, model=model, use_cache=use_cache, glossary=glossary,
                    keys=keys, progress=progress)
     return synthesize_and_merge(
-        prep, keep_music=keep_music, voice_sample=voice_sample,
+        prep, keep_music=keep_music, voice_sample=voice_sample, tts_backend=tts_backend,
         output=output, subs=subs, burn_subs=burn_subs,
         keep_intermediates=keep_intermediates, progress=progress)

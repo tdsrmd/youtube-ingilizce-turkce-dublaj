@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from youtube_dub import pipeline
 from youtube_dub.config import WHISPER_MODELS, load_api_keys, setup_logging
 from youtube_dub.download import check_dependencies
+from youtube_dub.tts import BACKENDS
 
 
 def main() -> None:
@@ -22,6 +23,8 @@ def main() -> None:
                         help="Çıktı mp4 (varsayılan: ~/Desktop/dublaj_<tarih>.mp4)")
     parser.add_argument("--model", default="large-v3-turbo", choices=list(WHISPER_MODELS),
                         help="Whisper modeli (küçük → hızlı | büyük → doğru)")
+    parser.add_argument("--tts", default="xtts", choices=list(BACKENDS),
+                        help="Ses motoru (xtts [varsayılan] | chatterbox — ayrı .venv-chatterbox gerektirir)")
     parser.add_argument("--voice-sample", default=None,
                         help="Klonlanacak referans ses (.wav). Verilmezse videodaki konuşmacı klonlanır.")
     parser.add_argument("--keep-music", action="store_true",
@@ -47,6 +50,7 @@ def main() -> None:
         model=args.model,
         keep_music=args.keep_music,
         voice_sample=args.voice_sample,
+        tts_backend=args.tts,
         output=args.output,
         use_cache=not args.no_cache,
         subs=args.subs or args.burn_subs,

@@ -1,0 +1,14 @@
+# Chatterbox Multilingual TTS — ALTERNATİF ses motoru (opsiyonel).
+#
+# DİKKAT: Chatterbox'ın bağımlılıkları (torch 2.6 / transformers 5.x) ana
+# kurulumdaki XTTS ile ÇAKIŞIR. Bu yüzden AYRI bir sanal ortama kurulur ve
+# subprocess ile çağrılır; ana .venv'e KURMAYIN.
+#
+# Kurulum:
+#   python3.11 -m venv .venv-chatterbox
+#   .venv-chatterbox/bin/pip install -r requirements-chatterbox.txt
+#
+# Kullanım:  python cli.py "<url>" --tts chatterbox     (veya web'de "Ses motoru")
+chatterbox-tts>=0.1.7
+# perth (watermark) pkg_resources kullanır; setuptools 81+ bunu kaldırdığından sabitle.
+setuptools<81
